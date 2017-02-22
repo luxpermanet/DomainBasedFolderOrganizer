@@ -128,7 +128,7 @@ DocProject/Help/Html2
 DocProject/Help/html
 
 # Click-Once directory
-publish/
+# publish/
 
 # Publish Web Output
 *.[Pp]ublish.xml
@@ -217,6 +217,6 @@ src/SkyScraper2010.sln
 src/SkyScraper2010.sln.rej
 *.datasource
 *.map
-*.xml
+# *.xml
 *.webinfo
 src/Web.SkyScraper.Robots.sln

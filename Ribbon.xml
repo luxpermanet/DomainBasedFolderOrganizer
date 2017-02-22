@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<customUI xmlns="http://schemas.microsoft.com/office/2009/07/customui" onLoad="Ribbon_Load">
+  <ribbon>
+    <tabs>
+      <tab idMso="TabAddIns">
+        <group id="ContentGroup" label="Folder Organizer">
+          
+          <button id="btnSettings" label="Edit Settings"
+               screentip="Settings" onAction="OnSettingsButton"
+               supertip="Shows edit settings window for Domain-based Folder Organizer Add-In"/>
+
+          <button id="btnEnableDisableAddIn" getLabel="GetLabelEnableDisableButton"
+               screentip="Enable/Disable Add-In" onAction="OnEnableDisableButton"
+               supertip="Enable/Disable Add-In"/>
+          
+          <button id="btnExtrospective" label="Don't Click"
+               screentip="Extrospective Button" onAction="OnExtrospectiveButton"
+               supertip="Don't ever hit this button, it may explode the world!"/>
+          
+        </group>
+      </tab>
+    </tabs>
+  </ribbon>
+</customUI>
+
