@@ -25,7 +25,11 @@ namespace DomainBasedFolderOrganizer
         private const string IncomingRulePrefix = "dbfo-incoming-";
         private const string OutgoingRulePrefix = "dbfo-outgoing-";
 
+        private const string SentboxFolderNamePrefix = "to ";
+
         private const string EventLogSource = "Outlook";
+        
+        private const string PR_SMTP_ADDRESS = "http://schemas.microsoft.com/mapi/proptag/0x39FE001E";
 
         private static readonly Dictionary<char, string> ParentFolderMap = new Dictionary<char, string>()
         {
@@ -243,10 +247,62 @@ namespace DomainBasedFolderOrganizer
 
         private bool TryGetSenderAddress(Outlook.MailItem mailItem, out string senderAddress)
         {
-            var exchangeUser = mailItem?.Sender?.GetExchangeUser();
-            senderAddress = exchangeUser?.PrimarySmtpAddress ?? mailItem?.SenderEmailAddress;
+            //var exchangeUser = mailItem?.Sender?.GetExchangeUser();
+            //senderAddress = exchangeUser?.PrimarySmtpAddress ?? mailItem?.SenderEmailAddress;
+
+            try
+            {
+                senderAddress = GetSenderAddress(mailItem);
+            }
+            catch
+            {
+                senderAddress = null;
+            }
             
             return senderAddress != null;
+        }
+
+        private string GetSenderAddress(Outlook.MailItem mail)
+        {
+            if (mail == null)
+            {
+                return null;
+            }
+
+            if (mail.SenderEmailType == "EX")
+            {
+                Outlook.AddressEntry sender = mail.Sender;
+                if (sender != null)
+                {
+                    //Now we have an AddressEntry representing the Sender
+                    if (sender.AddressEntryUserType == Outlook.OlAddressEntryUserType.olExchangeUserAddressEntry || 
+                        sender.AddressEntryUserType == Outlook.OlAddressEntryUserType.olExchangeRemoteUserAddressEntry)
+                    {
+                        //Use the ExchangeUser object PrimarySMTPAddress
+                        Outlook.ExchangeUser exchUser =sender.GetExchangeUser();
+                        if (exchUser != null)
+                        {
+                            return exchUser.PrimarySmtpAddress;
+                        }
+                        else
+                        {
+                            return null;
+                        }
+                    }
+                    else
+                    {
+                        return sender.PropertyAccessor.GetProperty(PR_SMTP_ADDRESS) as string;
+                    }
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            else
+            {
+                return mail.SenderEmailAddress;
+            }
         }
 
         private bool TryGetDomain(string address, out string domain)
@@ -369,7 +425,14 @@ namespace DomainBasedFolderOrganizer
 
         private Outlook.Rule CreateIncomingRule(Outlook.Rules ruleSet, string ruleName, string domain, Outlook.MAPIFolder folder, Outlook.MailItem mailItem)
         {
-            mailItem.Move(folder);
+            try
+            {
+                mailItem.Move(folder);
+            }
+            catch
+            {
+                // try to move, if it does not happen, ignore it
+            }
             
             Outlook.Rule rule = ruleSet.Create(ruleName, Outlook.OlRuleType.olRuleReceive);
 
@@ -439,14 +502,21 @@ namespace DomainBasedFolderOrganizer
             }
 
             var domainsAllowed = domains.Except(CurrentSettings.OutgoingExceptions);
-
+            
             Outlook.Rules ruleSet = null;
             var needsSave = false;
+
+            if (domainsAllowed.Count() > 0 && CurrentSettings.OutgoingFirstAction == OutgoingFirstAction.CreateSentFolderRule)
+            {
+                RefreshRules();
+                ruleSet = RuleSet;
+            }
+
             foreach (var domain in domainsAllowed)
             {
                 var ruleName = OutgoingRulePrefix + domain;
                 var initChar = char.ToUpper(domain.Take(1).First());
-                var folderName = initChar.ToString() + domain.Substring(1);
+                var folderName = SentboxFolderNamePrefix + initChar.ToString() + domain.Substring(1);
 
                 Outlook.MAPIFolder parentFolder = null;
                 if (CurrentSettings.OutgoingCreateParentFolders)
@@ -470,8 +540,6 @@ namespace DomainBasedFolderOrganizer
 
                 if (CurrentSettings.OutgoingFirstAction == OutgoingFirstAction.CreateSentFolderRule)
                 {
-                    RefreshRules();
-                    ruleSet = RuleSet;
                     if (!RuleExists(ruleSet, ruleName))
                     {
                         CreateOutgoingRule(ruleSet, ruleName, domain, folder, mailItem);
@@ -488,17 +556,35 @@ namespace DomainBasedFolderOrganizer
 
         private bool TryGetRecipientAddress(Outlook.Recipient recipient, out string recipientAddress)
         {
-            var exchangeUser = recipient.AddressEntry.GetExchangeUser();
-            recipientAddress = exchangeUser?.PrimarySmtpAddress ?? recipient.Address;
+            try
+            {
+                recipientAddress = GetRecipientAddress(recipient);
+            }
+            catch
+            {
+                recipientAddress = null;
+            }
 
             return recipientAddress != null;
+        }
+
+        private string GetRecipientAddress(Outlook.Recipient recipient)
+        {
+            Outlook.PropertyAccessor pa = recipient.PropertyAccessor;
+            return pa.GetProperty(PR_SMTP_ADDRESS).ToString();
         }
         
         private Outlook.Rule CreateOutgoingRule(Outlook.Rules ruleSet, string ruleName, string domain, Outlook.MAPIFolder folder, Outlook.MailItem mailItem)
         {
-
-            var copy = mailItem.Copy() as Outlook.MailItem;
-            copy.Move(folder);
+            try
+            {
+                var copy = mailItem.Copy() as Outlook.MailItem;
+                copy.Move(folder);
+            }
+            catch
+            {
+                // tried to move if it does not happen ignore
+            }
 
             Outlook.Rule rule = ruleSet.Create(ruleName, Outlook.OlRuleType.olRuleSend);
 
