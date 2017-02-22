@@ -14,11 +14,13 @@ namespace DomainBasedFolderOrganizer
         private Outlook.Rules rules;
         private Outlook.MAPIFolder inbox;
         private Outlook.MAPIFolder sentbox;
+        private Outlook.Folders searchFolders;
 
         public Outlook.NameSpace DefaultNamespace { get { return defaultNamespace; } }
         public Outlook.Rules RuleSet { get { return rules; } }
         public Outlook.MAPIFolder Inbox { get { return inbox; } }
         public Outlook.MAPIFolder Sentbox { get { return sentbox; } }
+        public Outlook.Folders SearchFolders { get { return searchFolders; } }
 
         private const string IncomingRulePrefix = "dbfo-incoming-";
         private const string OutgoingRulePrefix = "dbfo-outgoing-";
@@ -87,6 +89,7 @@ namespace DomainBasedFolderOrganizer
             rules = defaultNamespace.DefaultStore.GetRules();
             inbox = defaultNamespace.GetDefaultFolder(Outlook.OlDefaultFolders.olFolderInbox);
             sentbox = defaultNamespace.GetDefaultFolder(Outlook.OlDefaultFolders.olFolderSentMail);
+            searchFolders = defaultNamespace.DefaultStore.GetSearchFolders();
 
             Application.NewMailEx += Application_NewMailEx;
             Application.ItemSend += Application_ItemSend;
@@ -134,6 +137,7 @@ namespace DomainBasedFolderOrganizer
             inbox = null;
             sentbox = null;
             rules = null;
+            searchFolders = null;
             defaultNamespace = null;
         }
 
@@ -201,13 +205,22 @@ namespace DomainBasedFolderOrganizer
 
             if (CurrentSettings.IncomingSecondAction != IncomingSecondAction.DoNothing)
             {
+                RefreshSearchFolders();
+
+                Outlook.MAPIFolder searchFolder = null;
+
                 if (CurrentSettings.IncomingCreateParentFolders)
                 {
-                    CreateSearchFolder(parentFolder);
+                    searchFolder = parentFolder;
                 }
                 else
                 {
-                    CreateSearchFolder(folder);
+                    searchFolder = folder;
+                }
+
+                if (!FolderExists(searchFolder.Name, SearchFolders))
+                {
+                    CreateSearchFolder(searchFolder);
                 }
             }
             
@@ -221,6 +234,11 @@ namespace DomainBasedFolderOrganizer
                     ruleSet.Save(false);
                 }
             }
+        }
+
+        private void RefreshSearchFolders()
+        {
+            searchFolders = defaultNamespace.DefaultStore.GetSearchFolders();
         }
 
         private bool TryGetSenderAddress(Outlook.MailItem mailItem, out string senderAddress)
@@ -258,7 +276,20 @@ namespace DomainBasedFolderOrganizer
         {
             try
             {
-                var foo = parentFolder.Folders[folderName] as Outlook.MAPIFolder;
+                return FolderExists(folderName, parentFolder.Folders);
+            }
+            catch
+            {
+                // folder does not exist
+            }
+            return false;
+        }
+
+        private bool FolderExists(string folderName, Outlook.Folders foldersColl)
+        {
+            try
+            {
+                var foo = foldersColl[folderName] as Outlook.MAPIFolder;
                 return true; // folder exists
             }
             catch
