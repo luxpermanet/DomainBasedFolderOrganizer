@@ -29,12 +29,12 @@
     <AssemblyName>DomainBasedFolderOrganizer</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <DefineConstants>VSTO40</DefineConstants>
-    <IsWebBootstrapper>False</IsWebBootstrapper>
+    <IsWebBootstrapper>True</IsWebBootstrapper>
     <BootstrapperEnabled>true</BootstrapperEnabled>
-    <PublishUrl>\\cf\dfs\MM-Departments\Operations\Public\Tools\DomainBasedFolderOrganizer\</PublishUrl>
-    <InstallUrl />
+    <PublishUrl>C:\Git\mmops\DomainBasedFolderOrganizer\publish\</PublishUrl>
+    <InstallUrl>https://raw.githubusercontent.com/luxpermanet/DomainBasedFolderOrganizer/master/publish/</InstallUrl>
     <TargetCulture>en</TargetCulture>
-    <ApplicationVersion>1.0.0.1</ApplicationVersion>
+    <ApplicationVersion>1.0.0.0</ApplicationVersion>
     <AutoIncrementApplicationRevision>true</AutoIncrementApplicationRevision>
     <UpdateEnabled>true</UpdateEnabled>
     <UpdateInterval>7</UpdateInterval>
@@ -206,6 +206,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <None Include="app.config" />
+    <None Include="DomainBasedFolderOrganizer_TemporaryKey.pfx" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -240,7 +241,7 @@
     <ManifestKeyFile>DomainBasedFolderOrganizer_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>99B6EEF6E1D7BE18DB32DBAA98F62BC77FA1256A</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>1315BF272622BCB6948C6BE7D58742E151E3357E</ManifestCertificateThumbprint>
   </PropertyGroup>
   <!-- Include the build rules for a C# project. -->
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
