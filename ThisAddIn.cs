@@ -438,7 +438,7 @@ namespace DomainBasedFolderOrganizer
 
             // Rule Conditions
             // To condition
-            rule.Conditions.SenderAddress.Address = new string[] { domain };
+            rule.Conditions.SenderAddress.Address = new string[] { "@" + domain };
             rule.Conditions.SenderAddress.Enabled = true;
 
             // Rule Exceptions
@@ -590,7 +590,7 @@ namespace DomainBasedFolderOrganizer
 
             // Rule Conditions
             // To condition
-            rule.Conditions.RecipientAddress.Address = new string[] { domain };
+            rule.Conditions.RecipientAddress.Address = new string[] { "@" + domain };
             rule.Conditions.RecipientAddress.Enabled = true;
 
             // Rule Exceptions
