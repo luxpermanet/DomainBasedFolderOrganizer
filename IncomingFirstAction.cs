@@ -11,8 +11,8 @@ namespace DomainBasedFolderOrganizer
     {
         [Description("Do Nothing")]
         DoNothing,
-        [Description("Create inbox folder")]
-        CreateInboxFolder,
+        [Description("Create inbox folder and move")]
+        CreateInboxFolderMove,
         [Description("Create inbox folder and rule")]
         CreateInboxFolderRule
     }

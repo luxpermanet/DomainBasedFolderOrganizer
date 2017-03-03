@@ -11,8 +11,8 @@ namespace DomainBasedFolderOrganizer
     {
         [Description("Do Nothing")]
         DoNothing,
-        [Description("Create sent folder")]
-        CreateSentFolder,
+        [Description("Create sent folder and copy")]
+        CreateSentFolderCopy,
         [Description("Create sent folder and rule")]
         CreateSentFolderRule
     }

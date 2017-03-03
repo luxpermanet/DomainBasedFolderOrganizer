@@ -231,6 +231,15 @@ namespace DomainBasedFolderOrganizer
                 }
             }
             
+            try
+            {
+                mailItem.Move(folder);
+            }
+            catch
+            {
+                // try to move, if it does not happen, ignore it
+            }
+
             if (CurrentSettings.IncomingFirstAction == IncomingFirstAction.CreateInboxFolderRule)
             {
                 RefreshRules();
@@ -428,15 +437,6 @@ namespace DomainBasedFolderOrganizer
 
         private Outlook.Rule CreateIncomingRule(Outlook.Rules ruleSet, string ruleName, string domain, Outlook.MAPIFolder folder, Outlook.MailItem mailItem)
         {
-            try
-            {
-                mailItem.Move(folder);
-            }
-            catch
-            {
-                // try to move, if it does not happen, ignore it
-            }
-            
             Outlook.Rule rule = ruleSet.Create(ruleName, Outlook.OlRuleType.olRuleReceive);
 
             // Rule Conditions
@@ -540,6 +540,16 @@ namespace DomainBasedFolderOrganizer
                 {
                     folder = CreateFolder(folderName, parentFolder);
                 }
+                
+                try
+                {
+                    var copy = mailItem.Copy() as Outlook.MailItem;
+                    copy.Move(folder);
+                }
+                catch
+                {
+                    // tried to move if it does not happen ignore
+                }
 
                 if (CurrentSettings.OutgoingFirstAction == OutgoingFirstAction.CreateSentFolderRule)
                 {
@@ -579,16 +589,6 @@ namespace DomainBasedFolderOrganizer
         
         private Outlook.Rule CreateOutgoingRule(Outlook.Rules ruleSet, string ruleName, string domain, Outlook.MAPIFolder folder, Outlook.MailItem mailItem)
         {
-            try
-            {
-                var copy = mailItem.Copy() as Outlook.MailItem;
-                copy.Move(folder);
-            }
-            catch
-            {
-                // tried to move if it does not happen ignore
-            }
-
             Outlook.Rule rule = ruleSet.Create(ruleName, Outlook.OlRuleType.olRuleSend);
 
             // Rule Conditions
