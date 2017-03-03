@@ -31,28 +31,7 @@ namespace DomainBasedFolderOrganizer
     public class Ribbon : Office.IRibbonExtensibility
     {
         private Office.IRibbonUI ribbon;
-
-        private int extrospectiveButtonClickCount = 0;
-        private Dictionary<int, string> extrospectiveButtonMessages = new Dictionary<int, string>()
-        {
-            { 0, "Apparently you will not stop hitting that button but I am done with my warnings and I dunno what else I can do to stop you hitting that darn button :(" },
-            { 1, "It says don't click. I will keep it as a secret for this time but don't click again, deal?" },
-            { 2, "C'mon I thought we had a deal. You won't do that again, will you?" },
-            { 3, "And you did it again, applauses to you >:(" },
-            { 4, "No more games dude!" },
-            { 5, "Bona sera, bona sera you don't even call me godfather. -Godfather" },
-            { 6, "Frankly, my dear, I don't give a dam. -Gone With the Wind" },
-            { 8, "I am gonna make you an offer you can't refuse -Godfather" },
-            { 9, "Go ahead, make my day. -Sudden Impact" },
-            { 10, "You talking to me? -Taxi Driver" },
-            { 11, "What we-ve got here is failure to communicate. -Cool Hand Luke" },
-            { 12, "I'm as mad as hell, and I'm not going to take this anymore! -Network" },
-            { 13, "You can't handle the truth! -A Few Good Men" },
-            { 14, "No more games dude!" },
-            { 15, "" },
-            { 16, "" }
-        };
-
+        
         public event EventHandler OnEnableDisableAddIn;
         public event EventHandler OnEditSettings;
 
@@ -87,18 +66,6 @@ namespace DomainBasedFolderOrganizer
         public void OnSettingsButton(Office.IRibbonControl control)
         {
             OnEditSettings?.Invoke(null, null);
-        }
-
-        public void OnExtrospectiveButton(Office.IRibbonControl control)
-        {
-            string message = extrospectiveButtonMessages[0];
-            extrospectiveButtonClickCount++;
-            if (extrospectiveButtonMessages.ContainsKey(extrospectiveButtonClickCount))
-            {
-                message = extrospectiveButtonMessages[extrospectiveButtonClickCount];
-            }
-
-            MessageBox.Show(message, "Extrospective button says..", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
         }
 
         public void OnEnableDisableButton(Office.IRibbonControl control)

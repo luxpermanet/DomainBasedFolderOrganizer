@@ -34,7 +34,7 @@
     <PublishUrl>\\cf\dfs\MM-Departments\Operations\Public\Tools\DomainBasedFolderOrganizer\</PublishUrl>
     <InstallUrl />
     <TargetCulture>en</TargetCulture>
-    <ApplicationVersion>1.0.0.7</ApplicationVersion>
+    <ApplicationVersion>1.0.0.10</ApplicationVersion>
     <AutoIncrementApplicationRevision>true</AutoIncrementApplicationRevision>
     <UpdateEnabled>true</UpdateEnabled>
     <UpdateInterval>7</UpdateInterval>
@@ -241,7 +241,7 @@
     <ManifestKeyFile>DomainBasedFolderOrganizer_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>1315BF272622BCB6948C6BE7D58742E151E3357E</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>34F801AC0A455C84C7A671F4018586163932125E</ManifestCertificateThumbprint>
   </PropertyGroup>
   <!-- Include the build rules for a C# project. -->
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

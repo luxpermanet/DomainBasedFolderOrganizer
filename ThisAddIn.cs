@@ -14,6 +14,7 @@ namespace DomainBasedFolderOrganizer
         private Outlook.Rules rules;
         private Outlook.MAPIFolder inbox;
         private Outlook.MAPIFolder sentbox;
+        private Outlook.Items sentboxItems;
         private Outlook.Folders searchFolders;
 
         public Outlook.NameSpace DefaultNamespace { get { return defaultNamespace; } }
@@ -93,14 +94,15 @@ namespace DomainBasedFolderOrganizer
             rules = defaultNamespace.DefaultStore.GetRules();
             inbox = defaultNamespace.GetDefaultFolder(Outlook.OlDefaultFolders.olFolderInbox);
             sentbox = defaultNamespace.GetDefaultFolder(Outlook.OlDefaultFolders.olFolderSentMail);
+            sentboxItems = sentbox.Items;
             searchFolders = defaultNamespace.DefaultStore.GetSearchFolders();
-
+            
             Application.NewMailEx += Application_NewMailEx;
-            Application.ItemSend += Application_ItemSend;
+            sentboxItems.ItemAdd += Items_ItemAdd;
             Application.AdvancedSearchComplete += Application_AdvancedSearchComplete;
         }
 
-        private void Application_ItemSend(object Item, ref bool Cancel)
+        private void Items_ItemAdd(object Item)
         {
             AfterSend(Item);
         }
@@ -135,10 +137,11 @@ namespace DomainBasedFolderOrganizer
         private void DisableAddIn()
         {
             Application.NewMailEx -= Application_NewMailEx;
-            Application.ItemSend -= Application_ItemSend;
+            sentboxItems.ItemAdd -= Items_ItemAdd;
             Application.AdvancedSearchComplete -= Application_AdvancedSearchComplete;
             
             inbox = null;
+            sentboxItems = null;
             sentbox = null;
             rules = null;
             searchFolders = null;

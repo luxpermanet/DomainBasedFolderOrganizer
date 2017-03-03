@@ -13,10 +13,6 @@
                screentip="Enable/Disable Add-In" onAction="OnEnableDisableButton"
                supertip="Enable/Disable Add-In"/>
           
-          <button id="btnExtrospective" label="Don't Click"
-               screentip="Extrospective Button" onAction="OnExtrospectiveButton"
-               supertip="Don't ever hit this button, it may explode the world!"/>
-          
         </group>
       </tab>
     </tabs>
