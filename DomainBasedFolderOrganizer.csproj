@@ -34,15 +34,15 @@
     <PublishUrl>\\cf\dfs\MM-Departments\Operations\Public\Tools\DomainBasedFolderOrganizer\</PublishUrl>
     <InstallUrl />
     <TargetCulture>en</TargetCulture>
-    <ApplicationVersion>1.0.0.11</ApplicationVersion>
+    <ApplicationVersion>1.0.0.13</ApplicationVersion>
     <AutoIncrementApplicationRevision>true</AutoIncrementApplicationRevision>
     <UpdateEnabled>true</UpdateEnabled>
     <UpdateInterval>7</UpdateInterval>
     <UpdateIntervalUnits>days</UpdateIntervalUnits>
-    <ProductName>Domain-based Folder Organizer</ProductName>
-    <PublisherName>Lux Permanet</PublisherName>
+    <ProductName>Domain-Based Folder Organizer</ProductName>
+    <PublisherName>lux permanet</PublisherName>
     <SupportUrl />
-    <FriendlyName>DomainBasedFolderOrganizer</FriendlyName>
+    <FriendlyName>Domain-Based Folder Organizer</FriendlyName>
     <OfficeApplicationDescription />
     <LoadBehavior>3</LoadBehavior>
   </PropertyGroup>

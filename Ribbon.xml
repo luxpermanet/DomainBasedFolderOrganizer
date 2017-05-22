@@ -7,7 +7,7 @@
           
           <button id="btnSettings" label="Edit Settings"
                screentip="Settings" onAction="OnSettingsButton"
-               supertip="Shows edit settings window for Domain-based Folder Organizer Add-In"/>
+               supertip="Shows edit settings window for Domain-Based Folder Organizer Add-In"/>
 
           <button id="btnEnableDisableAddIn" getLabel="GetLabelEnableDisableButton"
                screentip="Enable/Disable Add-In" onAction="OnEnableDisableButton"

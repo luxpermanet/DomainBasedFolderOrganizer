@@ -3,7 +3,7 @@
   <Profiles />
   <Settings>
     <Setting Name="AddInEnabled" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">False</Value>
+      <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="IncomingFirstAction" Type="System.String" Scope="User">
       <Value Profile="(Default)">CreateInboxFolderMove</Value>
